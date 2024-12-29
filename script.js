@@ -89,10 +89,9 @@ function showSaveOption() {
     // Désactiver le bouton après le premier clic
     saveButton.addEventListener("click", () => saveResults(saveButton, cancelButton));
     cancelButton.addEventListener("click", () => {
-        quizSection.innerHTML = `<h2>Merci d'avoir participé au quiz !</h2>`;
+    quizSection.innerHTML = `<h2>Merci d'avoir participé au quiz !</h2>`;
     });
 }
-
 // Enregistrer les résultats dans Google Sheets
 const scriptURL = "https://script.google.com/macros/s/AKfycbyHPPpb67krWs7GYZ6m_s07XRLzWRw6uVhfAgwQ1pDnqT0q1o1-shRZcGyyuRgv22TpAg/exec";
 
@@ -100,8 +99,7 @@ function saveResults(saveButton, cancelButton) {
     // Désactiver le bouton "Enregistrer" pour éviter plusieurs clics
     saveButton.disabled = true;
     saveButton.textContent = "Enregistrement en cours...";
-
-    fetch(scriptURL, {
+        fetch(scriptURL, {
         method: "POST",
         mode: "no-cors", // Désactiver les restrictions CORS
         body: JSON.stringify({
@@ -117,17 +115,19 @@ function saveResults(saveButton, cancelButton) {
     })
     .then(() => {
         // Confirmation de l'enregistrement
-        saveButton.textContent = "Résultats enregistrés avec succès !";
-        saveButton.style.backgroundColor = "#4CAF50"; // Indiquer le succès
-        cancelButton.disabled = true; // Désactiver le bouton "Annuler"
+        quizSection.innerHTML = `
+            <h2>Merci d'avoir participé au quiz !</h2>
+            <p>Vos résultats ont été enregistrés avec succès.</p>
+        `;
     })
     .catch(error => {
         console.error("Erreur :", error);
-        saveButton.textContent = "Erreur lors de l'enregistrement.";
-        saveButton.style.backgroundColor = "#FF0000"; // Indiquer une erreur
+        quizSection.innerHTML = `
+            <h2>Erreur lors de l'enregistrement des résultats.</h2>
+            <p>Veuillez réessayer plus tard.</p>
+        `;
     });
 }
-
 // Boutons Oui / Non
 yesButton.addEventListener("click", () => handleAnswer(true));
 noButton.addEventListener("click", () => handleAnswer(false));
