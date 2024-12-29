@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Informatique</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz Informatique</h1>
+        <div id="user-info">
+            <p>Veuillez entrer vos informations :</p>
+            <label for="name">Nom :</label>
+            <input type="text" id="name" required><br>
+            <label for="surname">Prénom :</label>
+            <input type="text" id="surname" required><br>
+            <label for="email">Email :</label>
+            <input type="email" id="email" required><br>
+            <button id="startButton">Commencer le quiz</button>
+        </div>
+        <div id="quiz-section" style="display: none;">
+            <p id="question">Question s'affichera ici</p>
+            <div class="buttons">
+                <button id="yesButton">Oui</button>
+                <button id="noButton">Non</button>
+            </div>
+            <p id="progress">Question 1/20</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver"></script>
+</body>
+</html>
