@@ -131,3 +131,86 @@ function saveResults(saveButton, cancelButton) {
 // Boutons Oui / Non
 yesButton.addEventListener("click", () => handleAnswer(true));
 noButton.addEventListener("click", () => handleAnswer(false));
+
+// Ajouter une section pour le graphique
+function showSaveOption() {
+    quizSection.innerHTML = `
+        <h2>Quiz terminé !</h2>
+        <p>Votre score est de ${score}/20.</p>
+        <p>Souhaitez-vous enregistrer vos résultats dans Google Sheets ?</p>
+        <button id="saveButton">Enregistrer</button>
+        <button id="cancelButton">Annuler</button>
+        <canvas id="resultsChart" width="400" height="200"></canvas>
+    `;
+
+    const saveButton = document.getElementById("saveButton");
+    const cancelButton = document.getElementById("cancelButton");
+
+    // Afficher le graphique
+    renderChart();
+
+    saveButton.addEventListener("click", () => saveResults(saveButton, cancelButton));
+    cancelButton.addEventListener("click", () => {
+        quizSection.innerHTML = `<h2>Merci d'avoir participé au quiz !</h2>`;
+    });
+}
+
+// Fonction pour afficher le graphique des résultats
+function renderChart() {
+    const ctx = document.getElementById("resultsChart").getContext("2d");
+
+    // Calcul des données
+    const correctAnswers = score;
+    const incorrectAnswers = questions.length - score;
+
+    // Ajouter le score au centre avec un plugin
+    const centerTextPlugin = {
+        id: "centerText",
+        beforeDraw(chart) {
+            const { width } = chart;
+            const { height } = chart;
+            const { ctx } = chart;
+            const fontSize = (height / 100) * 7;
+
+            ctx.save();
+            ctx.font = `${fontSize}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "#000";
+            ctx.fillText(`${score}/${questions.length}`, width / 2, height / 2);
+            ctx.restore();
+        },
+    };
+
+    // Initialisation du graphique
+    new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: ["Correctes", "Incorrectes"],
+            datasets: [
+                {
+                    label: "Répartition des réponses",
+                    data: [correctAnswers, incorrectAnswers],
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.6)", // Vert clair
+                        "rgba(255, 99, 132, 0.6)", // Rouge clair
+                    ],
+                    borderColor: [
+                        "rgba(75, 192, 192, 1)",
+                        "rgba(255, 99, 132, 1)",
+                    ],
+                    borderWidth: 1,
+                },
+            ],
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "top",
+                },
+            },
+        },
+        plugins: [centerTextPlugin], // Ajouter le plugin ici
+    });
+}
